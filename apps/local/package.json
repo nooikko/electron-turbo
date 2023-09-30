@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon"
+    "copy:public": "copyfiles -u 1 public/* dist/public",
+    "dev": "rimraf dist && nodemon"
   },
   "devDependencies": {
     "@types/node": "^17.0.12",

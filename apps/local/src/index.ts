@@ -1,38 +1,78 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, net } from 'electron';
 import path from 'path';
 
 let mainWindow: BrowserWindow | null = null;
 
-async function createWindow() {
+const checkLocalhostAvailable = async () => {
+  return new Promise<boolean>((resolve) => {
+    const request = net.request('http://localhost:3000');
+
+    request.on('response', (response) => {
+      // Check for the expected response status
+      if (response.statusCode === 200) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+
+    request.on('error', () => {
+      resolve(false);
+    });
+
+    request.end();
+  });
+};
+
+const loadAppOrFallback = async () => {
+  const isAvailable = await checkLocalhostAvailable();
+
+  if (isAvailable) {
+    await mainWindow?.loadURL('http://localhost:3000');
+  } else {
+    const fallbackPath = path.join(__dirname, 'public', 'loading.html');
+    const fallbackUrl = new URL(`file://${fallbackPath}`);
+    await mainWindow?.loadURL(fallbackUrl.toString());
+
+    // Poll until localhost:3000 is available
+    const intervalId = setInterval(async () => {
+      if (await checkLocalhostAvailable()) {
+        clearInterval(intervalId);
+        await mainWindow?.loadURL('http://localhost:3000');
+      }
+    }, 1000);
+  }
+};
+
+const createWindow = async () => {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     webPreferences: {
       nodeIntegration: true,
     },
   });
 
-  try {
-    // Try to load the Next.js app
-    await mainWindow.loadURL('http://localhost:3000');
-  } catch (e) {
-    // If the Next.js app is not available, load a local fallback HTML file
-    const fallbackPath = path.join(__dirname, 'loading.html');
-    const fallbackUrl = new URL(`file://${fallbackPath}`);
-    await mainWindow.loadURL(fallbackUrl.toString());
-  }
+  await loadAppOrFallback();
+
+  // Open devtools in a separate window
+  mainWindow.webContents.openDevTools({ mode: 'detach' });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
-}
+};
 
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
 app.on('activate', () => {
-  if (mainWindow === null) createWindow();
+  if (mainWindow === null) {
+    createWindow();
+  }
 });
