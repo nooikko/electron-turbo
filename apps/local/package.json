@@ -1,0 +1,16 @@
+{
+  "name": "local",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.12",
+    "electron": "^26.2.4",
+    "eslint-config-electron": "*",
+    "nodemon": "^3.0.1",
+    "tsconfig": "*",
+    "typescript": "^4.5.3"
+  }
+}

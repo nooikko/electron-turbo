@@ -1,0 +1,9 @@
+{
+  "watch": ["src", ".env"],
+  "ext": "ts,js,json,tsx,jsx",
+  "exec": "tsc && electron ./dist/index.js",
+  "ignore": ["src/**/*.spec.ts"],
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
