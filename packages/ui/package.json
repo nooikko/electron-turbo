@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
+    "dev": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
     "generate:component": "turbo gen react-component"
   },
   "devDependencies": {
@@ -13,8 +14,10 @@
     "@types/node": "^20.5.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "eslint-config-custom": "*",
+    "eslint-config-package": "*",
     "react": "^18.2.0",
+    "tailwind-config": "*",
+    "tailwindcss": "^3.3.3",
     "tsconfig": "*",
     "typescript": "^4.5.2"
   }

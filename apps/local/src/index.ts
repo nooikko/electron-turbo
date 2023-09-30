@@ -47,7 +47,7 @@ const loadAppOrFallback = async () => {
 const createWindow = async () => {
   mainWindow = new BrowserWindow({
     width: 1280,
-    height: 720,
+    height: 860,
     webPreferences: {
       nodeIntegration: true,
     },
