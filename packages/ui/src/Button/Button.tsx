@@ -1,14 +1,19 @@
-import * as React from 'react';
+import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
-interface Props {
-  children?: React.ReactNode;
+interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+  loading?: boolean;
 }
 
-export const Button = ({ children }: Props) => {
+export const Button: React.FC<ButtonProps> = ({ loading, children, className, ...props }) => {
+  const classes = twMerge(
+    'inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
+    className,
+  );
+
   return (
-    <div>
-      <h1>Button</h1>
+    <button className={classes} {...props}>
       {children}
-    </div>
+    </button>
   );
 };
