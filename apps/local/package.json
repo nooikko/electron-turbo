@@ -2,16 +2,42 @@
   "name": "local",
   "version": "1.0.0",
   "private": true,
+  "main": "dist/index.js",
+  "build": {
+    "appId": "com.nooikko.local",
+    "electronLanguages": ["en"],
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "!node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}",
+      "!node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig"
+    ],
+    "win": {
+      "target": "nsis",
+      "artifactName": "automation-framework.${ext}"
+    }
+  },
   "scripts": {
+    "build": "rimraf build && rimraf dist && tsc && npm run copy:public && npm run copy:web && npm run update:paths && electron-builder && npm run copy:build && rimraf build && rimraf dist",
+    "update:paths": "node pipeline/updateHtmlPaths.js",
     "copy:public": "copyfiles -u 1 public/* dist/public",
+    "copy:web": "copyfiles -u 3 ../web/out/**/* dist/web",
+    "copy:build": "copyfiles -u 1 build/automation-framework.exe out",
     "dev": "rimraf dist && nodemon"
   },
   "devDependencies": {
     "@types/node": "^17.0.12",
-    "electron": "^26.2.4",
+    "app-builder-bin": "^4.2.0",
+    "electron": "26.2.4",
+    "electron-builder": "^24.6.4",
     "eslint-config-electron": "*",
     "nodemon": "^3.0.1",
     "tsconfig": "*",
-    "typescript": "^4.5.3"
+    "typescript": "^4.5.3",
+    "web": "*"
   }
 }
