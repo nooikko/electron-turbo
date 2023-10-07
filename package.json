@@ -20,7 +20,7 @@
     "prettier-plugin-tailwindcss": "^0.5.4",
     "rimraf": "^5.0.5",
     "tsconfig": "*",
-    "turbo": "latest",
+    "turbo": "^1.10.15",
     "wait-on": "^7.0.1"
   },
   "name": "electron-turbo",
