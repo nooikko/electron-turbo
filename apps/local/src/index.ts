@@ -48,7 +48,7 @@ const createWindow = async () => {
   }
 
   // Open devtools in a separate window
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
+  // mainWindow.webContents.openDevTools({ mode: 'detach' });
 
   mainWindow.on('closed', () => {
     mainWindow = null;

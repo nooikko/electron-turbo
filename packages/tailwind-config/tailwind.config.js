@@ -6,15 +6,5 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require('@tailwindcss/forms'), require('tailwindcss-themer')({ // eslint-disable-line
-      defaultTheme: {
-        extend: {
-          colors: {
-            primary: 'indigo',
-          },
-        },
-      },
-      themes: [],
-    }),
-  ],
+  plugins: [require('daisyui')],
 };

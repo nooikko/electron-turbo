@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.3",
-    "tailwindcss-themer": "^3.1.2"
+    "daisyui": "^3.9.2"
   }
 }
