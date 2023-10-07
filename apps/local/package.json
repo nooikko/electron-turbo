@@ -22,11 +22,11 @@
     }
   },
   "scripts": {
-    "build": "rimraf build && rimraf dist && tsc && npm run copy:public && npm run copy:web && npm run update:paths && electron-builder && npm run copy:build && rimraf build && rimraf dist",
+    "build": "rimraf build && rimraf dist && tsc && npm run build:copy:public && npm run copy:web && npm run update:paths && electron-builder && npm run build:copy:build",
     "update:paths": "node pipeline/updateHtmlPaths.js",
-    "copy:public": "copyfiles -u 1 public/* dist/public",
-    "copy:web": "copyfiles -u 3 ../web/out/**/* dist/web",
-    "copy:build": "copyfiles -u 1 build/automation-framework.exe out",
+    "build:copy:public": "copyfiles -u 1 public/* dist/public",
+    "build:copy:build": "copyfiles -u 1 build/automation-framework.exe out",
+    "copy:web": "copyfiles -u 3 ../web/dist/**/* dist/app",
     "dev": "rimraf dist && nodemon"
   },
   "devDependencies": {
@@ -39,5 +39,8 @@
     "tsconfig": "*",
     "typescript": "^4.5.3",
     "web": "*"
+  },
+  "dependencies": {
+    "next": "^13.4.19"
   }
 }

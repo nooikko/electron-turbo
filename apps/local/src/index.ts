@@ -5,9 +5,10 @@ let mainWindow: BrowserWindow | null = null;
 
 const checkLocalhostAvailable = async () => {
   return new Promise<boolean>((resolve) => {
-    const request = net.request('http://localhost:3000');
+    const request = net.request('http://127.0.0.1:5173');
 
     request.on('response', (response) => {
+      console.log(response);
       // Check for the expected response status
       if (response.statusCode === 200) {
         resolve(true);
@@ -25,29 +26,21 @@ const checkLocalhostAvailable = async () => {
 };
 
 const loadAppOrFallback = async () => {
-  if (process.env.NODE_ENV === 'development') {
-    const isAvailable = await checkLocalhostAvailable();
+  const isAvailable = await checkLocalhostAvailable();
 
-    if (isAvailable) {
-      await mainWindow?.loadURL('http://localhost:3000');
-    } else {
-      const fallbackPath = path.join(__dirname, 'public', 'loading.html');
-      const fallbackUrl = new URL(`file://${fallbackPath}`);
-      await mainWindow?.loadURL(fallbackUrl.toString());
-
-      // Poll until localhost:3000 is available
-      const intervalId = setInterval(async () => {
-        if (await checkLocalhostAvailable()) {
-          clearInterval(intervalId);
-          await mainWindow?.loadURL('http://localhost:3000');
-        }
-      }, 1000);
-    }
+  if (isAvailable) {
+    await mainWindow?.loadURL('http://127.0.0.1:5173');
   } else {
-    // Production mode
-    const appPath = path.join(__dirname, '..', 'dist', 'web', 'index.html'); // Adjust the path to your built Next.js app
-    const appUrl = new URL(`file://${appPath}`);
-    await mainWindow?.loadURL(appUrl.toString());
+    const fallbackPath = path.join(__dirname, 'public', 'loading.html');
+    const fallbackUrl = new URL(`file://${fallbackPath}`);
+    await mainWindow?.loadURL(fallbackUrl.toString());
+
+    const intervalId = setInterval(async () => {
+      if (await checkLocalhostAvailable()) {
+        clearInterval(intervalId);
+        await mainWindow?.loadURL('http://127.0.0.1:5173');
+      }
+    }, 1000);
   }
 };
 
@@ -60,7 +53,7 @@ const createWindow = async () => {
     },
   });
 
-  await loadAppOrFallback();
+  await mainWindow?.loadFile(path.join(__dirname, 'app', 'index.html'));
 
   // Open devtools in a separate window
   mainWindow.webContents.openDevTools({ mode: 'detach' });

@@ -1,14 +1,27 @@
-const fs = require('fs'); // eslint-disable-line
-const path = require('path'); // eslint-disable-line
+const fs = require('fs');  // eslint-disable-line
+const path = require('path');  // eslint-disable-line
 
-const updateHtmlPaths = (htmlFilePath) => {
-  const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-  const updatedContent = htmlContent.replace(
-    /\/_next\//g, // Regular expression to match '/_next/' preceded by whitespace
-    '_next/', // Replacement string, ' _next/' with a space at the beginning
-  );
-  fs.writeFileSync(htmlFilePath, updatedContent, 'utf8');
+const updatePaths = (filePath) => {
+  const fileContent = fs.readFileSync(filePath, 'utf8');
+  // Replacing a leading forward slash that follows a quote
+  const updatedContent = fileContent.replace(/(["'])\/([^\/])/g, '$1$2');
+  fs.writeFileSync(filePath, updatedContent, 'utf8');
 };
 
-const htmlFilePath = path.resolve(__dirname, '../dist/web/index.html');
-updateHtmlPaths(htmlFilePath);
+const searchAndUpdateInDirectory = (directory) => {
+  const files = fs.readdirSync(directory);
+
+  for (const file of files) {
+    const filePath = path.join(directory, file);
+    const stats = fs.statSync(filePath);
+
+    if (stats.isDirectory()) {
+      searchAndUpdateInDirectory(filePath);
+    } else if (fs.readFileSync(filePath, 'utf8').match(/(["'])\/([^\/])/)) {
+      updatePaths(filePath);
+    }
+  }
+};
+
+const distPath = path.resolve(__dirname, '../dist/app');  // eslint-disable-line
+searchAndUpdateInDirectory(distPath);

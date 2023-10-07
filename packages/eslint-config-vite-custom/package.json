@@ -1,5 +1,5 @@
 {
-  "name": "eslint-config-next-custom",
+  "name": "eslint-config-vite-custom",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",

@@ -15,7 +15,7 @@ module.exports = {
       },
     },
   },
-  extends: ['plugin:prettier/recommended', 'next', 'turbo', 'plugin:react/recommended', 'plugin:@typescript-eslint/recommended'],
+  extends: ['plugin:prettier/recommended', 'turbo', 'plugin:react/recommended', 'plugin:@typescript-eslint/recommended'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -86,7 +86,5 @@ module.exports = {
     curly: 2,
     'react/react-in-jsx-scope': 0,
     'import/no-anonymous-default-export': ['off'],
-    '@next/next/no-html-link-for-pages': 'off',
-    '@next/next/no-img-element': 'off',
   },
 };

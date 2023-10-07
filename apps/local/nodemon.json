@@ -1,7 +1,7 @@
 {
   "watch": ["src", ".env"],
   "ext": "ts,js,json,tsx,jsx",
-  "exec": "tsc && npm run copy:public && electron ./dist/index.js",
+  "exec": "tsc && npm run build:copy:public && npm run copy:web && npm run update:paths && electron ./dist/index.js",
   "ignore": ["src/**/*.spec.ts"],
   "env": {
     "NODE_ENV": "development"
