@@ -28,17 +28,24 @@ const highlightMatches = (name: string, matches: Fuse.FuseResultMatch[] | undefi
   if (!matches) {
     return name;
   }
-  let highlightedName = '';
+
+  const highlightedComponents: React.ReactNode[] = [];
   let currentIndex = 0;
+
   matches.forEach((match) => {
     match.indices.forEach(([start, end]) => {
-      highlightedName += name.slice(currentIndex, start);
-      highlightedName += `<b>${name.slice(start, end + 1)}</b>`;
+      // Add text before the matched substring
+      highlightedComponents.push(name.slice(currentIndex, start));
+      // Add the matched substring, highlighted
+      highlightedComponents.push(<b key={highlightedComponents.length}>{name.slice(start, end + 1)}</b>);
       currentIndex = end + 1;
     });
   });
-  highlightedName += name.slice(currentIndex);
-  return highlightedName;
+
+  // Add remaining text after the last matched substring
+  highlightedComponents.push(name.slice(currentIndex));
+
+  return highlightedComponents;
 };
 
 export const CommandPalette: FC<CommandPaletteProps> = ({ items, loading, error, placeholder = 'Search...', onClearError }) => {
@@ -133,9 +140,12 @@ export const CommandPalette: FC<CommandPaletteProps> = ({ items, loading, error,
                               key={item.id}
                               value={item}
                               className={({ active }) => classNames('cursor-pointer select-none px-4 py-2', active ? 'bg-indigo-600 text-white' : '')}
-                              onClick={item.onItemClick}
+                              onClick={() => {
+                                item.onItemClick();
+                                closePalette();
+                              }}
                             >
-                              <span dangerouslySetInnerHTML={{ __html: highlightMatches(item.name, item.matches) }} />
+                              <span>{highlightMatches(item.name, item.matches)}</span>
                             </Combobox.Option>
                           ))}
                         </ul>

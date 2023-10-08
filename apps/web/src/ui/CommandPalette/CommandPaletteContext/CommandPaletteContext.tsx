@@ -41,6 +41,10 @@ export const CommandPaletteProvider = ({ children }: CommandPaletteProviderProps
       openPalette();
       event.preventDefault();
     }
+
+    if (event.key === 'Escape') {
+      closePalette();
+    }
   }, []);
 
   useEffect(() => {

@@ -1,11 +1,11 @@
-import React, { useCallback, useContext, useMemo } from 'react';
-import ReactFlow, { MiniMap, Controls, Background, useEdgesState, addEdge, BackgroundVariant, OnConnect, ReactFlowProvider } from 'reactflow';
-import { NodeTypeDict } from '../Nodes';
-import { NodeContext } from '#components/NodeContext';
-import 'reactflow/dist/style.css';
-import { ViewportLogger } from '../ViewportLogger';
-import { CommandPaletteContext } from '#ui/CommandPalette';
 import { FlowContext } from '#components/FlowContext';
+import { NodeContext } from '#components/NodeContext';
+import { CommandPaletteContext } from '#ui/CommandPalette';
+import React, { useCallback, useContext, useMemo } from 'react';
+import ReactFlow, { Background, BackgroundVariant, Controls, MiniMap, OnConnect, ReactFlowProvider, addEdge, useEdgesState } from 'reactflow';
+import 'reactflow/dist/style.css';
+import { NodeTypeDict } from '../Nodes';
+import { ViewportLogger } from '../ViewportLogger';
 
 interface FlowProps {}
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
