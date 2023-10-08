@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { useFlowState, useTaxonomyColor } from '#hooks';
 import { Handle } from '#components/Handle';
-import { IOType } from '#taxonomy';
+import { IOKey } from '#taxonomy';
 
 interface ImageNodeProps {}
 
@@ -31,7 +31,7 @@ export const ImageNode: React.FC<ImageNodeProps> = ({}) => {
 
   return (
     <NodeCard>
-      <NodeHeader className={useTaxonomyColor(IOType.Screenshot)?.class}>Screenshot</NodeHeader>
+      <NodeHeader className={useTaxonomyColor(IOKey.Screenshot)?.class}>Screenshot</NodeHeader>
       <div className='p-1.5 pr-2.5'>
         <label
           htmlFor={id?.current}
@@ -43,7 +43,7 @@ export const ImageNode: React.FC<ImageNodeProps> = ({}) => {
           </div>
           <input type='file' id={id?.current} className='hidden' onChange={onImageChange} />
         </label>
-        <Handle io={IOType.Screenshot} type='source' position='right' />
+        <Handle io={IOKey.Screenshot} type='source' position='right' />
       </div>
     </NodeCard>
   );

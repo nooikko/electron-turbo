@@ -1,7 +1,7 @@
-import { IOType } from '#taxonomy';
+import { IOKey } from '#taxonomy';
 import React, { createContext, useState, PropsWithChildren } from 'react';
 interface HandleData {
-  io: IOType;
+  io: IOKey;
 }
 interface HandleContextType {
   handles: Record<string, HandleData>;

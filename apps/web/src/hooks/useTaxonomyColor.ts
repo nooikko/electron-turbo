@@ -1,5 +1,5 @@
-import { taxonomy, IOType } from '#taxonomy';
+import { taxonomy, IOKey } from '#taxonomy';
 
-export const useTaxonomyColor = (type: IOType) => {
+export const useTaxonomyColor = (type: IOKey) => {
   return taxonomy[type].colors;
 };

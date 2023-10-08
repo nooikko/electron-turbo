@@ -1,10 +1,12 @@
 import { ImageNode } from './ImageNode';
+import { FindOnScreenNode } from './FindOnScreenNode';
 import React from 'react';
 
 interface NodeType {
   id: string;
   key: string;
   name: string;
+  description: string;
   component: React.FC<any>;
 }
 
@@ -13,7 +15,15 @@ const nodes: NodeType[] = [
     id: 'palette-screenshot-node',
     key: 'image',
     name: 'Screenshot',
+    description: 'Use an image as a variable',
     component: ImageNode,
+  },
+  {
+    id: 'palette-find-on-screen-node',
+    key: 'find-on-screen',
+    name: 'Find on screen',
+    description: 'Find an image on screen',
+    component: FindOnScreenNode,
   },
 ];
 

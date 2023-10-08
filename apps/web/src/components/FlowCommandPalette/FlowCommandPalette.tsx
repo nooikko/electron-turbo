@@ -12,6 +12,7 @@ export const FlowCommandPalette: React.FC = () => {
         id: node.id,
         name: node.name,
         category: 'Nodes',
+        description: node.description,
         onItemClick: () => {
           addNode(node?.key);
         },

@@ -9,6 +9,7 @@ export interface PaletteItem {
   id: string;
   name: string;
   category: string;
+  description: string;
   onItemClick: () => void;
 }
 
@@ -139,13 +140,18 @@ export const CommandPalette: FC<CommandPaletteProps> = ({ items, loading, error,
                             <Combobox.Option
                               key={item.id}
                               value={item}
-                              className={({ active }) => classNames('cursor-pointer select-none px-4 py-2', active ? 'bg-indigo-600 text-white' : '')}
+                              className={({ active }) =>
+                                classNames('cursor-pointer select-none px-4 py-2', active ? 'bg-indigo-600 text-white' : 'text-neutral')
+                              }
                               onClick={() => {
                                 item.onItemClick();
                                 closePalette();
                               }}
                             >
-                              <span>{highlightMatches(item.name, item.matches)}</span>
+                              <div className='flex flex-col '>
+                                <span>{highlightMatches(item.name, item.matches)}</span>
+                                <div className='opacity-70'>{item.description}</div>
+                              </div>
                             </Combobox.Option>
                           ))}
                         </ul>

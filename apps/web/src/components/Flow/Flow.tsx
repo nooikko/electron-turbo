@@ -6,6 +6,7 @@ import ReactFlow, { Background, BackgroundVariant, Controls, MiniMap, OnConnect,
 import 'reactflow/dist/style.css';
 import { NodeTypeDict } from '../Nodes';
 import { ViewportLogger } from '../ViewportLogger';
+import { useValidateConnection } from '#hooks';
 
 interface FlowProps {}
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
@@ -16,6 +17,7 @@ export const Flow: React.FC<FlowProps> = ({}) => {
   const { container, instance } = useContext(FlowContext);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { openPaletteWithClick } = useContext(CommandPaletteContext);
+  const validateConnection = useValidateConnection();
 
   const onConnect = useCallback<OnConnect>((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
   return (
@@ -39,6 +41,7 @@ export const Flow: React.FC<FlowProps> = ({}) => {
           onInit={(inst) => {
             instance.current = inst;
           }}
+          isValidConnection={validateConnection}
           onPaneContextMenu={openPaletteWithClick}
           fitView
           fitViewOptions={{
