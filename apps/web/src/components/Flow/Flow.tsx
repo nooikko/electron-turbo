@@ -1,21 +1,25 @@
 import React, { useCallback, useContext, useMemo } from 'react';
 import ReactFlow, { MiniMap, Controls, Background, useEdgesState, addEdge, BackgroundVariant, OnConnect, ReactFlowProvider } from 'reactflow';
-import { NodeTypes } from '../Nodes';
+import { NodeTypeDict } from '../Nodes';
 import { NodeContext } from '#components/NodeContext';
 import 'reactflow/dist/style.css';
 import { ViewportLogger } from '../ViewportLogger';
+import { CommandPaletteContext } from '#ui/CommandPalette';
+import { FlowContext } from '#components/FlowContext';
 
 interface FlowProps {}
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
 export const Flow: React.FC<FlowProps> = ({}) => {
-  const nodeTypes = useMemo(() => NodeTypes, []);
+  const nodeTypes = useMemo(() => NodeTypeDict, []);
   const { nodes, onNodesChange } = useContext(NodeContext);
+  const { container, instance } = useContext(FlowContext);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const { openPaletteWithClick } = useContext(CommandPaletteContext);
 
   const onConnect = useCallback<OnConnect>((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
   return (
-    <div className='h-screen w-screen'>
+    <div className='h-screen w-screen' ref={container}>
       <ReactFlowProvider>
         <ReactFlow
           nodeTypes={nodeTypes}
@@ -28,9 +32,14 @@ export const Flow: React.FC<FlowProps> = ({}) => {
           minZoom={0.2}
           nodes={nodes}
           edges={edges}
+          nodeOrigin={[0.5, 0.5]}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          onInit={(inst) => {
+            instance.current = inst;
+          }}
+          onPaneContextMenu={openPaletteWithClick}
           fitView
           fitViewOptions={{
             maxZoom: 1.5,

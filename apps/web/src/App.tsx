@@ -1,13 +1,21 @@
 import { Flow } from '#components/Flow';
-import { NodeContextProvider } from '#components/NodeContext';
+import { FlowProvider } from '#components/FlowContext';
+import { NodeProvider } from '#components/NodeContext';
+import { CommandPaletteProvider } from '#ui/CommandPalette';
+import { FlowCommandPalette } from '#components/FlowCommandPalette';
 
 const App = () => {
   return (
-    <NodeContextProvider>
-      <div className='h-full w-full'>
-        <Flow />
-      </div>
-    </NodeContextProvider>
+    <FlowProvider>
+      <NodeProvider>
+        <CommandPaletteProvider>
+          <FlowCommandPalette />
+          <div className='h-full w-full'>
+            <Flow />
+          </div>
+        </CommandPaletteProvider>
+      </NodeProvider>
+    </FlowProvider>
   );
 };
 
