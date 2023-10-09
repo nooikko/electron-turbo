@@ -6,18 +6,18 @@ import ReactFlow, { Background, BackgroundVariant, Controls, MiniMap, OnConnect,
 import 'reactflow/dist/style.css';
 import { NodeTypeDict } from '../Nodes';
 import { ViewportLogger } from '../ViewportLogger';
-import { useValidateConnection } from '#hooks';
+import { useFlowStructure, useValidateConnection } from '#hooks';
 
 interface FlowProps {}
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
 export const Flow: React.FC<FlowProps> = ({}) => {
   const nodeTypes = useMemo(() => NodeTypeDict, []);
   const { nodes, onNodesChange } = useContext(NodeContext);
   const { container, instance } = useContext(FlowContext);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { openPaletteWithClick } = useContext(CommandPaletteContext);
   const validateConnection = useValidateConnection();
+  const getFlowStructure = useFlowStructure();
 
   const onConnect = useCallback<OnConnect>((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
   return (
@@ -56,6 +56,9 @@ export const Flow: React.FC<FlowProps> = ({}) => {
           <Background variant={BackgroundVariant.Dots} gap={12} size={1.2} />
           <ViewportLogger />
         </ReactFlow>
+        <button onClick={() => getFlowStructure()} className='absolute right-5 top-5 bg-blue-500 p-1'>
+          Test
+        </button>
       </ReactFlowProvider>
     </div>
   );

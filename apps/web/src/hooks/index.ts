@@ -3,3 +3,4 @@ export * from './useAddNode';
 export * from './useHandleManager';
 export * from './useTaxonomyColor';
 export * from './useValidateConnection';
+export * from './useFlowStructure';

@@ -32,6 +32,9 @@
       ],
       "#taxonomy": [
         "taxonomy"
+      ],
+      "#processors": [
+        "processors"
       ]
     }
   },
