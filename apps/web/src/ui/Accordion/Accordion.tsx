@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useNodeId, useUpdateNodeInternals } from 'reactflow';
+import { useFlowState } from '#hooks';
 
 interface AccordionProps {
   children: [ReactElement, ReactElement];
@@ -12,6 +13,7 @@ export const Accordion: React.FC<AccordionProps> = ({ children, handlePosition }
   const id = useNodeId();
   const [closedContent, openContent] = children;
   const updateNodeInternals = useUpdateNodeInternals();
+  const [, setState] = useFlowState<{ open: boolean }>({ open: false });
 
   return (
     <Disclosure as='div'>
@@ -20,6 +22,8 @@ export const Accordion: React.FC<AccordionProps> = ({ children, handlePosition }
           if (open) {
             updateNodeInternals(id as string);
           }
+
+          setState({ open });
         }, [open]);
 
         return (

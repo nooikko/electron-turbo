@@ -1,1 +1,2 @@
-export * from './classes/Graph';
+export * from './classes/data/Graph';
+export * from './types';

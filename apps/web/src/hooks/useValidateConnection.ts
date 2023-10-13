@@ -1,5 +1,5 @@
 import { IsValidConnection } from 'reactflow';
-import { IOType } from '#taxonomy';
+import { IOType } from 'taxonomy/io';
 import { useContext, useCallback } from 'react';
 import { HandleContext } from '#components/HandleContext';
 

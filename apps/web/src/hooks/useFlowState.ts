@@ -23,7 +23,10 @@ export const useFlowState = <T>(initialValue: T) => {
             ...updatedNodes[index],
             data: {
               ...updatedNodes[index].data,
-              custom: data,
+              custom: {
+                ...updatedNodes[index].data.custom, // Spread existing custom object properties
+                ...data, // Spread new data properties
+              },
             },
           };
         } else {

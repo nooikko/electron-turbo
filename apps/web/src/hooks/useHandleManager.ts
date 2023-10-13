@@ -5,7 +5,7 @@ export const useHandleManager = () => {
   const { handles, setHandles } = useContext(HandleContext);
 
   const modifyHandle = useCallback(
-    (data: Record<string, Record<string, any>>) => {
+    (data: Record<string, any>) => {
       const keys = Object.keys(data);
 
       if (keys.length > 1) {

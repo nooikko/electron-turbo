@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { AiOutlineUpload } from 'react-icons/ai';
 import { useFlowState, useTaxonomyColor } from '#hooks';
 import { Handle } from '#components/Handle';
-import { IOKey } from '#taxonomy';
+import { IOKey } from 'taxonomy/io';
 
 interface ImageNodeProps {}
 
