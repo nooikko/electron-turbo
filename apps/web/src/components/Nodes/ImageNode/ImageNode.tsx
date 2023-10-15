@@ -6,6 +6,7 @@ import { AiOutlineUpload } from 'react-icons/ai';
 import { useFlowState, useTaxonomyColor } from '#hooks';
 import { Handle } from '#components/Handle';
 import { IOKey } from 'taxonomy/io';
+import { NodeType } from '#types';
 
 interface ImageNodeProps {}
 
@@ -56,8 +57,16 @@ export const ImageNode: React.FC<ImageNodeProps> = ({}) => {
           </label>
         )}
         {file?.screenshot && <Screenshot src={file?.screenshot} />}
-        <Handle io={IOKey.Screenshot} type='source' position='right' />
+        <Handle marker='output-1' io={IOKey.Screenshot} type='source' position='right' />
       </div>
     </NodeCard>
   );
+};
+
+export const ImageNodeMeta: NodeType = {
+  id: 'palette-image-node',
+  key: 'image',
+  name: 'Image',
+  description: 'An image',
+  component: ImageNode,
 };

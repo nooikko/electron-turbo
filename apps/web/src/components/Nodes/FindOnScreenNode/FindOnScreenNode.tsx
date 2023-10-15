@@ -1,9 +1,10 @@
-import { NodeCard } from '#ui/NodeCard';
-import { NodeHeader } from '#ui/NodeHeader';
 import { Handle } from '#components/Handle';
-import { IOKey } from 'taxonomy/io';
 import { Accordion } from '#ui/Accordion';
 import { HandleLayout } from '#ui/HandleLayout';
+import { NodeCard } from '#ui/NodeCard';
+import { NodeHeader } from '#ui/NodeHeader';
+import { IOKey } from 'taxonomy/io';
+import { NodeType } from '#types';
 
 export const FindOnScreenNode = () => {
   return (
@@ -39,4 +40,12 @@ export const FindOnScreenNode = () => {
       </div>
     </NodeCard>
   );
+};
+
+export const FindOnScreenNodeMeta: NodeType = {
+  id: 'palette-find-on-screen-node',
+  key: 'find-on-screen',
+  name: 'Find on screen',
+  description: 'Find an image on screen',
+  component: FindOnScreenNode,
 };

@@ -1,40 +1,18 @@
-import { ImageNode } from './ImageNode';
-import { FindOnScreenNode } from './FindOnScreenNode';
+import { ImageNodeMeta } from './ImageNode';
+import { FindOnScreenNodeMeta } from './FindOnScreenNode';
 import React from 'react';
 
-interface NodeType {
-  id: string;
-  key: string;
-  name: string;
-  description: string;
-  component: React.FC<any>;
-}
-
-const nodes: NodeType[] = [
-  {
-    id: 'palette-screenshot-node',
-    key: 'image',
-    name: 'Screenshot',
-    description: 'Use an image as a variable',
-    component: ImageNode,
-  },
-  {
-    id: 'palette-find-on-screen-node',
-    key: 'find-on-screen',
-    name: 'Find on screen',
-    description: 'Find an image on screen',
-    component: FindOnScreenNode,
-  },
-];
+const nodes = [ImageNodeMeta, FindOnScreenNodeMeta];
 
 export const NodeTypes = [...nodes] as const;
 
-export type NodeKeys = (typeof NodeTypes)[number]['key']; // 'image'
+// Generate NodeKeys type dynamically
+export type NodeKeys = (typeof NodeTypes)[number]['key'];
 
-export const NodeTypeDict = NodeTypes.reduce(
+export const NodeTypeDict: Record<NodeKeys, React.FC<any>> = NodeTypes.reduce(
   (acc, cur) => {
-    acc[cur.key] = cur.component;
+    acc[cur.key as NodeKeys] = cur.component;
     return acc;
   },
-  {} as Record<string, React.FC<any>>,
+  {} as Record<NodeKeys, React.FC<any>>,
 );

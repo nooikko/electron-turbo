@@ -1,12 +1,15 @@
+import { EdgeContext } from '#components/EdgeContext';
 import { FlowContext } from '#components/FlowContext';
 import { NodeContext } from '#components/NodeContext';
+import { useValidateConnection } from '#hooks';
 import { CommandPaletteContext } from '#ui/CommandPalette';
 import React, { useCallback, useContext, useMemo } from 'react';
-import ReactFlow, { Background, BackgroundVariant, Controls, MiniMap, OnConnect, ReactFlowProvider, addEdge, useEdgesState } from 'reactflow';
+import ReactFlow, { Background, BackgroundVariant, Controls, MiniMap, OnConnect, ReactFlowProvider, addEdge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { NodeTypeDict } from '../Nodes';
 import { ViewportLogger } from '../ViewportLogger';
-import { useFlowStructure, useValidateConnection } from '#hooks';
+import { NodeContextMenuContext } from '#components/NodeContextMenuContext';
+import { ContextMenu } from '#components/ContextMenu';
 
 interface FlowProps {}
 
@@ -14,10 +17,10 @@ export const Flow: React.FC<FlowProps> = ({}) => {
   const nodeTypes = useMemo(() => NodeTypeDict, []);
   const { nodes, onNodesChange } = useContext(NodeContext);
   const { container, instance } = useContext(FlowContext);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const { edges, setEdges, onEdgesChange } = useContext(EdgeContext);
   const { openPaletteWithClick } = useContext(CommandPaletteContext);
+  const { openContextMenu, closeContextMenu } = useContext(NodeContextMenuContext);
   const validateConnection = useValidateConnection();
-  const getFlowStructure = useFlowStructure();
 
   const onConnect = useCallback<OnConnect>((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
   return (
@@ -42,7 +45,10 @@ export const Flow: React.FC<FlowProps> = ({}) => {
             instance.current = inst;
           }}
           isValidConnection={validateConnection}
+          onPaneClick={closeContextMenu}
           onPaneContextMenu={openPaletteWithClick}
+          onNodeContextMenu={openContextMenu}
+          onNodeClick={closeContextMenu}
           fitView
           fitViewOptions={{
             maxZoom: 1.5,
@@ -55,10 +61,8 @@ export const Flow: React.FC<FlowProps> = ({}) => {
           <MiniMap />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1.2} />
           <ViewportLogger />
+          <ContextMenu />
         </ReactFlow>
-        <button onClick={() => getFlowStructure()} className='absolute right-5 top-5 bg-blue-500 p-1'>
-          Test
-        </button>
       </ReactFlowProvider>
     </div>
   );

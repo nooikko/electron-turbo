@@ -2,7 +2,7 @@ import { NodeContext } from '#components/NodeContext';
 import { NodeKeys } from '#components/Nodes';
 import { CommandPaletteContext } from '#ui/CommandPalette';
 import { useCallback, useContext, useRef, useEffect } from 'react';
-import { Node } from 'reactflow';
+import { Node, XYPosition } from 'reactflow';
 import { v4 as uuid } from 'uuid';
 
 export const useAddNode = () => {
@@ -15,15 +15,17 @@ export const useAddNode = () => {
   }, [mousePos]);
 
   const addNode = useCallback(
-    (type: NodeKeys) => {
+    (type: NodeKeys, position: XYPosition) => {
       const node: Node = {
         id: uuid(),
         type,
-        position: mousePosRef.current,
+        position,
         data: {},
       };
 
       setNodes((nodes) => [node, ...nodes]);
+
+      return node;
     },
     [setNodes],
   );

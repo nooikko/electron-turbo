@@ -1,12 +1,12 @@
 import { NodeTypes } from '#components/Nodes';
 import { useAddNode } from '#hooks';
-import { CommandPalette, PaletteItem } from '#ui/CommandPalette';
-import React, { useMemo } from 'react';
+import { CommandPalette, CommandPaletteContext, PaletteItem } from '#ui/CommandPalette';
+import React, { useMemo, useContext } from 'react';
 
 export const FlowCommandPalette: React.FC = () => {
   const addNode = useAddNode();
-
-  const items: PaletteItem[] = useMemo(() => {
+  const { mousePos } = useContext(CommandPaletteContext);
+  const nodes: PaletteItem[] = useMemo(() => {
     return NodeTypes.map((node) => {
       return {
         id: node.id,
@@ -14,11 +14,11 @@ export const FlowCommandPalette: React.FC = () => {
         category: 'Nodes',
         description: node.description,
         onItemClick: () => {
-          addNode(node?.key);
+          addNode(node?.key, mousePos);
         },
       };
     });
-  }, []);
+  }, [mousePos]);
 
-  return <CommandPalette items={items} />;
+  return <CommandPalette items={[...nodes]} />;
 };
