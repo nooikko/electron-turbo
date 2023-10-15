@@ -1,12 +1,12 @@
-import React, { useRef } from 'react';
+import { Handle } from '#components/Handle';
+import { useFlowState, useTaxonomyColor } from '#hooks';
+import { NodeType } from '#types';
 import { NodeCard } from '#ui/NodeCard';
 import { NodeHeader } from '#ui/NodeHeader';
-import { v4 as uuid } from 'uuid';
+import React, { useRef } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
-import { useFlowState, useTaxonomyColor } from '#hooks';
-import { Handle } from '#components/Handle';
-import { IOKey } from 'taxonomy/io';
-import { NodeType } from '#types';
+import { IOKey, MarkerKey, ValidMarkers } from '#taxonomy';
+import { v4 as uuid } from 'uuid';
 
 interface ImageNodeProps {}
 
@@ -57,7 +57,7 @@ export const ImageNode: React.FC<ImageNodeProps> = ({}) => {
           </label>
         )}
         {file?.screenshot && <Screenshot src={file?.screenshot} />}
-        <Handle marker='output-1' io={IOKey.Screenshot} type='source' position='right' />
+        <Handle marker={MarkerKey.OutputOne} io={IOKey.Screenshot} type='source' position='right' />
       </div>
     </NodeCard>
   );
@@ -66,7 +66,14 @@ export const ImageNode: React.FC<ImageNodeProps> = ({}) => {
 export const ImageNodeMeta: NodeType = {
   id: 'palette-image-node',
   key: 'image',
-  name: 'Image',
-  description: 'An image',
+  name: 'Screenshot',
+  description: 'Use an image as a variable',
   component: ImageNode,
 };
+
+export const ImageConfiguration: ValidMarkers[] = [
+  {
+    input: [],
+    output: [MarkerKey.OutputOne],
+  },
+];

@@ -1,15 +1,20 @@
 import { useContext } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { NodeContextMenuContext } from '#components/NodeContextMenuContext';
-import { ContextMenuButton } from './ContextMenuButton';
+import { ContextMenuButton, ContextMenuButtonProps } from './ContextMenuButton';
+import { useDeleteNode } from '#hooks';
 
-export const ContextMenu: React.FC = () => {
-  const { isContextMenuOpen, contextMenuPosition, closeContextMenu } = useContext(NodeContextMenuContext);
+interface ContextMenuProps {
+  nodeButtons: React.FC<ContextMenuButtonProps>[];
+}
 
-  // Define the styles for positioning the context menu
+export const ContextMenu: React.FC<ContextMenuProps> = () => {
+  const { isContextMenuOpen, contextMenuPosition, closeContextMenu, nodeId } = useContext(NodeContextMenuContext);
+  const deleteNode = useDeleteNode();
+
   const menuStyles = {
-    left: `${contextMenuPosition.x}px`, // Use the x-coordinate from contextMenuPosition
-    top: `${contextMenuPosition.y}px`, // Use the y-coordinate from contextMenuPosition
+    left: `${contextMenuPosition.x}px`,
+    top: `${contextMenuPosition.y}px`,
     zIndex: 10,
   };
 
@@ -17,11 +22,14 @@ export const ContextMenu: React.FC = () => {
   return isContextMenuOpen ? (
     <div className='absolute w-56 rounded-md bg-base-100 shadow-md' style={menuStyles}>
       <div className='flex flex-col p-1'>
-        <ContextMenuButton onClick={closeContextMenu} Icon={FaTrash}>
-          Delete
-        </ContextMenuButton>
-        <ContextMenuButton onClick={closeContextMenu} Icon={FaTrash}>
-          Delete
+        <ContextMenuButton
+          onClick={() => {
+            deleteNode(nodeId);
+            closeContextMenu();
+          }}
+          Icon={FaTrash}
+        >
+          Delete Node
         </ContextMenuButton>
       </div>
     </div>

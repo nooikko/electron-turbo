@@ -1,10 +1,16 @@
 import { IOKey } from 'taxonomy/io';
 import React, { createContext, useState, PropsWithChildren } from 'react';
-interface HandleData {
+import { MarkerKey } from '#taxonomy';
+import { Position, HandleType } from 'reactflow';
+
+export interface HandleData {
   io: IOKey;
-  marker?: string;
+  nodeId: string;
+  marker: MarkerKey;
+  position: Position;
+  type: HandleType;
 }
-interface HandleContextType {
+export interface HandleContextType {
   handles: Record<string, HandleData>;
   setHandles: React.Dispatch<React.SetStateAction<Record<string, HandleData>>>;
 }

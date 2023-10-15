@@ -1,6 +1,7 @@
-import { ImageNodeMeta } from './ImageNode';
-import { FindOnScreenNodeMeta } from './FindOnScreenNode';
+import { ValidMarkers } from '#taxonomy';
 import React from 'react';
+import { FindOnScreenConfiguration, FindOnScreenNodeMeta } from './FindOnScreenNode';
+import { ImageConfiguration, ImageNodeMeta } from './ImageNode';
 
 const nodes = [ImageNodeMeta, FindOnScreenNodeMeta];
 
@@ -16,3 +17,8 @@ export const NodeTypeDict: Record<NodeKeys, React.FC<any>> = NodeTypes.reduce(
   },
   {} as Record<NodeKeys, React.FC<any>>,
 );
+
+export const NodeConfigurations: Record<NodeKeys, ValidMarkers[]> = {
+  [ImageNodeMeta.key]: ImageConfiguration,
+  [FindOnScreenNodeMeta.key]: FindOnScreenConfiguration,
+};

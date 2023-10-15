@@ -34,7 +34,8 @@ export const Accordion: React.FC<AccordionProps> = ({ children, handlePosition }
                   {open ? <FaChevronUp /> : <FaChevronDown />}
                 </Disclosure.Button>
               )}
-              {open ? openContent : closedContent}
+              <div className={`transition-all duration-300 ${open ? 'block' : 'hidden'}`}>{openContent}</div>
+              <div className={`transition-all duration-300 ${open ? 'hidden' : 'block'}`}>{closedContent}</div>
               {handlePosition === 'left' && (
                 <Disclosure.Button className={`rounded bg-transparent pl-1 text-xs font-bold ${open ? 'pt-0.5' : ''}`}>
                   {open ? <FaChevronUp /> : <FaChevronDown />}

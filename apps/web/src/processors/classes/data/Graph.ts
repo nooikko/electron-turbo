@@ -1,6 +1,7 @@
 import { NodeKeys } from '#components/Nodes';
 import { XYPosition, ReactFlowJsonObject } from 'reactflow';
-// Custom error classes
+import { HandleData } from '#components/HandleContext';
+
 class NodeError extends Error {}
 class EdgeError extends Error {}
 class GraphError extends Error {}
@@ -13,14 +14,16 @@ interface GraphNodeData<T = any> {
   positionAbsolute?: XYPosition;
   type?: NodeKeys;
   width?: number | null;
+  inputHandles?: string[];
+  outputHandles?: string[];
 }
 
 interface EdgeData {
   id: string;
   source: string;
   target: string;
-  sourceHandle?: string | null;
-  targetHandle?: string | null;
+  sourceHandleId?: string | null;
+  targetHandleId?: string | null;
 }
 
 class GraphNode<T = any> {
@@ -54,6 +57,16 @@ class GraphNode<T = any> {
   children(): GraphNode<T>[] {
     return this._children;
   }
+
+  addInputHandle(handleId: string): void {
+    this.data.inputHandles = this.data.inputHandles || [];
+    this.data.inputHandles.push(handleId);
+  }
+
+  addOutputHandle(handleId: string): void {
+    this.data.outputHandles = this.data.outputHandles || [];
+    this.data.outputHandles.push(handleId);
+  }
 }
 
 class Edge {
@@ -65,14 +78,23 @@ class Edge {
     }
     this.data = data;
   }
+
+  setSourceHandleId(id: string): void {
+    this.data.sourceHandleId = id;
+  }
+
+  setTargetHandleId(id: string): void {
+    this.data.targetHandleId = id;
+  }
 }
 
 export class Graph<T = any> {
   nodes: Map<string, GraphNode<T>> = new Map();
   edges: Map<string, Edge> = new Map();
-  structure: GraphNode<T>[] = []; // New property to hold the root nodes
+  handles: Map<string, HandleData> = new Map();
+  structure: GraphNode<T>[] = [];
 
-  constructor(nodeDataArray: ReactFlowJsonObject<T>['nodes'], edgeDataArray: ReactFlowJsonObject['edges']) {
+  constructor(nodeDataArray: ReactFlowJsonObject<T>['nodes'], edgeDataArray: ReactFlowJsonObject['edges'], handlesData?: Record<string, HandleData>) {
     for (const data of nodeDataArray) {
       const node = new GraphNode(data);
       this.nodes.set(data.id, node);
@@ -83,7 +105,15 @@ export class Graph<T = any> {
       this.addEdge(edge);
     }
 
-    this.processStructure(); // Call the processStructure method
+    if (handlesData) {
+      Object.keys(handlesData).forEach((handleId) => {
+        const handleData = handlesData[handleId];
+        this.handles.set(handleId, handleData);
+        this.addHandleToNode(handleData.nodeId, handleId);
+      });
+    }
+
+    this.processStructure();
   }
 
   processStructure(): void {
@@ -101,7 +131,6 @@ export class Graph<T = any> {
 
     this.nodes.forEach((node) => {
       if (node.parents().length === 0) {
-        // Changed to method call node.parents()
         this.structure.push(node);
       }
     });
@@ -120,6 +149,20 @@ export class Graph<T = any> {
     }
   }
 
+  addHandleToNode(nodeId: string, handleId: string): void {
+    const node = this.findNode(nodeId);
+    const handle = this.findHandle(handleId);
+    if (node && handle) {
+      if (handle.type === 'source') {
+        node.addOutputHandle(handleId);
+      } else if (handle.type === 'target') {
+        node.addInputHandle(handleId);
+      }
+    } else {
+      throw new GraphError('Node or handle not found');
+    }
+  }
+
   findNode(id: string): GraphNode<T> | null {
     if (!id) {
       throw new GraphError('Id must be provided');
@@ -134,6 +177,13 @@ export class Graph<T = any> {
     return this.edges.get(id) || null;
   }
 
+  findHandle(id: string): HandleData | null {
+    if (!id) {
+      throw new GraphError('Id must be provided');
+    }
+    return this.handles.get(id) || null;
+  }
+
   getRootNodes(): GraphNode<T>[] {
     const rootNodes: GraphNode<T>[] = [];
     this.nodes.forEach((node) => {
@@ -145,6 +195,6 @@ export class Graph<T = any> {
   }
 
   getStructure(): GraphNode<T>[] {
-    return this.structure; // New method to access the structure property
+    return this.structure;
   }
 }

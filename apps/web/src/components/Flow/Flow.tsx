@@ -1,7 +1,7 @@
 import { EdgeContext } from '#components/EdgeContext';
 import { FlowContext } from '#components/FlowContext';
 import { NodeContext } from '#components/NodeContext';
-import { useValidateConnection } from '#hooks';
+import { useFlowStructure, useValidateConnection } from '#hooks';
 import { CommandPaletteContext } from '#ui/CommandPalette';
 import React, { useCallback, useContext, useMemo } from 'react';
 import ReactFlow, { Background, BackgroundVariant, Controls, MiniMap, OnConnect, ReactFlowProvider, addEdge } from 'reactflow';
@@ -21,6 +21,7 @@ export const Flow: React.FC<FlowProps> = ({}) => {
   const { openPaletteWithClick } = useContext(CommandPaletteContext);
   const { openContextMenu, closeContextMenu } = useContext(NodeContextMenuContext);
   const validateConnection = useValidateConnection();
+  const getFlowStructure = useFlowStructure();
 
   const onConnect = useCallback<OnConnect>((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
   return (
@@ -61,8 +62,11 @@ export const Flow: React.FC<FlowProps> = ({}) => {
           <MiniMap />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1.2} />
           <ViewportLogger />
-          <ContextMenu />
+          {/* <ContextMenu /> */}
         </ReactFlow>
+        <button className='absolute right-5 top-5 rounded-md bg-primary p-1 text-white shadow-md' onClick={() => getFlowStructure()}>
+          Get Structure
+        </button>
       </ReactFlowProvider>
     </div>
   );

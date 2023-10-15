@@ -1,8 +1,8 @@
 import { useHandleManager, useTaxonomyColor } from '#hooks';
 import { useEffect, useRef } from 'react';
-import { Position, Handle as RFHandle, HandleProps as RFHandleProps } from 'reactflow';
+import { Position, Handle as RFHandle, HandleProps as RFHandleProps, useNodeId } from 'reactflow';
 import { v4 as uuid } from 'uuid';
-import { IOKey } from 'taxonomy/io';
+import { IOKey, MarkerKey } from '#taxonomy';
 
 const buildStyle = (position: Position, baseStyle?: React.CSSProperties) => {
   const style: React.CSSProperties = {
@@ -33,7 +33,7 @@ const buildStyle = (position: Position, baseStyle?: React.CSSProperties) => {
 interface HandleProps extends Omit<RFHandleProps, 'position'> {
   position: 'left' | 'right';
   io: IOKey;
-  marker: string;
+  marker: MarkerKey;
 }
 
 const positionDict = {
@@ -43,6 +43,7 @@ const positionDict = {
 
 export const Handle: React.FC<HandleProps> = ({ type, position, io, marker }) => {
   const id = useRef(uuid());
+  const nodeId = useNodeId() as string;
   const manageHandle = useHandleManager();
 
   useEffect(() => {
@@ -50,6 +51,9 @@ export const Handle: React.FC<HandleProps> = ({ type, position, io, marker }) =>
       [id?.current]: {
         io,
         marker,
+        nodeId,
+        position: positionDict[position],
+        type,
       },
     });
   }, []);

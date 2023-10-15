@@ -1,11 +1,11 @@
 import { useCallback, useContext } from 'react';
-import { HandleContext } from '#components/HandleContext';
+import { HandleContext, HandleData } from '#components/HandleContext';
 
 export const useHandleManager = () => {
   const { handles, setHandles } = useContext(HandleContext);
 
   const modifyHandle = useCallback(
-    (data: Record<string, any>) => {
+    (data: Record<string, HandleData>) => {
       const keys = Object.keys(data);
 
       if (keys.length > 1) {
