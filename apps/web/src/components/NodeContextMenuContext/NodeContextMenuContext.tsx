@@ -1,13 +1,14 @@
-import React, { PropsWithChildren, useContext, createContext, useCallback, useState } from 'react';
+import React, { PropsWithChildren, useContext, createContext, useCallback, useState, useMemo } from 'react';
 import { FlowContext } from '#components/FlowContext';
-import { NodeMouseHandler, XYPosition } from 'reactflow'; // Import the necessary type
+import { NodeMouseHandler, XYPosition, Node } from 'reactflow'; // Import the necessary type
+import { useNode } from '#hooks';
 
 interface NodeContextMenuContextType {
   isContextMenuOpen: boolean;
   contextMenuPosition: XYPosition;
   openContextMenu: NodeMouseHandler;
   closeContextMenu: () => void;
-  nodeId: string;
+  node?: Node<unknown>;
 }
 
 export const NodeContextMenuContext = createContext<NodeContextMenuContextType>({
@@ -15,7 +16,7 @@ export const NodeContextMenuContext = createContext<NodeContextMenuContextType>(
   contextMenuPosition: { x: 0, y: 0 },
   openContextMenu: () => {},
   closeContextMenu: () => {},
-  nodeId: '',
+  node: {} as Node<unknown>,
 });
 
 export const NodeContextMenuProvider: React.FC<PropsWithChildren> = ({ children }) => {
@@ -23,6 +24,7 @@ export const NodeContextMenuProvider: React.FC<PropsWithChildren> = ({ children 
   const [nodeId, setNodeId] = useState('');
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+  const node = useNode(nodeId);
 
   const openContextMenu = useCallback<NodeMouseHandler>(
     (event, node) => {
@@ -60,22 +62,21 @@ export const NodeContextMenuProvider: React.FC<PropsWithChildren> = ({ children 
     [container, instance?.current],
   );
 
-  const closeContextMenu = useCallback(() => {
+  const closeContextMenu = () => {
     setNodeId('');
     setIsContextMenuOpen(false);
-  }, [nodeId]);
+  };
 
-  return (
-    <NodeContextMenuContext.Provider
-      value={{
-        isContextMenuOpen,
-        contextMenuPosition,
-        openContextMenu,
-        closeContextMenu,
-        nodeId,
-      }}
-    >
-      {children}
-    </NodeContextMenuContext.Provider>
+  const contextValue = useMemo(
+    () => ({
+      isContextMenuOpen,
+      contextMenuPosition,
+      openContextMenu,
+      closeContextMenu,
+      node,
+    }),
+    [isContextMenuOpen, contextMenuPosition, openContextMenu, closeContextMenu, nodeId, node],
   );
+
+  return <NodeContextMenuContext.Provider value={contextValue}>{children}</NodeContextMenuContext.Provider>;
 };

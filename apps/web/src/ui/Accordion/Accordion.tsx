@@ -13,7 +13,7 @@ export const Accordion: React.FC<AccordionProps> = ({ children, handlePosition }
   const id = useNodeId();
   const [closedContent, openContent] = children;
   const updateNodeInternals = useUpdateNodeInternals();
-  const [, setState] = useFlowState<{ open: boolean }>({ open: false });
+  const [, setState] = useFlowState<{ open: boolean }>({ initialValue: { open: false } });
 
   return (
     <Disclosure as='div'>

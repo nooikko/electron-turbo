@@ -6,25 +6,28 @@ import { FlowCommandPalette } from '#components/FlowCommandPalette';
 import { HandleProvider } from '#components/HandleContext';
 import { EdgeProvider } from '#components/EdgeContext';
 import { NodeContextMenuProvider } from '#components/NodeContextMenuContext';
+import { ReactFlowProvider } from 'reactflow';
 
 const App = () => {
   return (
-    <FlowProvider>
-      <NodeProvider>
-        <EdgeProvider>
-          <NodeContextMenuProvider>
-            <CommandPaletteProvider>
-              <HandleProvider>
-                <FlowCommandPalette />
-                <div className='h-full w-full'>
-                  <Flow />
-                </div>
-              </HandleProvider>
-            </CommandPaletteProvider>
-          </NodeContextMenuProvider>
-        </EdgeProvider>
-      </NodeProvider>
-    </FlowProvider>
+    <ReactFlowProvider>
+      <FlowProvider>
+        <NodeProvider>
+          <EdgeProvider>
+            <NodeContextMenuProvider>
+              <CommandPaletteProvider>
+                <HandleProvider>
+                  <FlowCommandPalette />
+                  <div className='h-full w-full'>
+                    <Flow />
+                  </div>
+                </HandleProvider>
+              </CommandPaletteProvider>
+            </NodeContextMenuProvider>
+          </EdgeProvider>
+        </NodeProvider>
+      </FlowProvider>
+    </ReactFlowProvider>
   );
 };
 

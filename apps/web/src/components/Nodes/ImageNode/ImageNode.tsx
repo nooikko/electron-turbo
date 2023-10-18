@@ -29,7 +29,7 @@ const Screenshot: React.FC<ScreenshotProps> = ({ src }) => {
 
 export const ImageNode: React.FC<ImageNodeProps> = ({}) => {
   const id = useRef(uuid());
-  const [file, setFlowFile] = useFlowState<{ screenshot: string } | null>(null);
+  const [file, setFlowFile] = useFlowState<{ screenshot: string | null } | null>({ initialValue: null });
 
   const onImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -65,7 +65,7 @@ export const ImageNode: React.FC<ImageNodeProps> = ({}) => {
 
 export const ImageNodeMeta: NodeType = {
   id: 'palette-image-node',
-  key: 'image',
+  key: 'screenshot',
   name: 'Screenshot',
   description: 'Use an image as a variable',
   component: ImageNode,

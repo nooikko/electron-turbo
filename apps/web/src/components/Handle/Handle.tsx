@@ -1,8 +1,8 @@
 import { useHandleManager, useTaxonomyColor } from '#hooks';
-import { useEffect, useRef } from 'react';
-import { Position, Handle as RFHandle, HandleProps as RFHandleProps, useNodeId } from 'reactflow';
+import { useEffect, useMemo, useRef } from 'react';
+import { Position, Handle as RFHandle, HandleProps as RFHandleProps, useEdges, useNodeId } from 'reactflow';
 import { v4 as uuid } from 'uuid';
-import { IOKey, MarkerKey } from '#taxonomy';
+import { IOKey, MarkerKey, taxonomy } from '#taxonomy';
 
 const buildStyle = (position: Position, baseStyle?: React.CSSProperties) => {
   const style: React.CSSProperties = {
@@ -43,6 +43,9 @@ const positionDict = {
 
 export const Handle: React.FC<HandleProps> = ({ type, position, io, marker }) => {
   const id = useRef(uuid());
+  const edges = useEdges();
+  const connectedEdges = useMemo(() => edges.filter((edge) => edge?.sourceHandle === id.current || edge?.targetHandle === id.current), [edges]);
+  const isConnectable = useMemo(() => connectedEdges.length < taxonomy[io]?.configuration.connections.max, [connectedEdges]);
   const nodeId = useNodeId() as string;
   const manageHandle = useHandleManager();
 
@@ -60,9 +63,11 @@ export const Handle: React.FC<HandleProps> = ({ type, position, io, marker }) =>
 
   return (
     <RFHandle
+      className={`${!isConnectable && '!bg-gray-400'}`}
       style={buildStyle(positionDict[position], { background: useTaxonomyColor(io)?.hex })}
       id={id?.current}
       type={type}
+      isConnectable={isConnectable}
       position={positionDict[position]}
     />
   );

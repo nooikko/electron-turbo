@@ -54,8 +54,8 @@ export const boundingBoxRight: IOStructure = {
 export const boundingBoxTop: IOStructure = {
   name: IOKey.BoundingBoxTop,
   colors: {
-    hex: '#22c55e',
-    class: 'bg-green-500',
+    hex: '#15803d',
+    class: 'bg-green-700',
   },
   structures: {
     input: IOType.BoundingBoxTop,
@@ -71,8 +71,8 @@ export const boundingBoxTop: IOStructure = {
 export const boundingBoxBottom: IOStructure = {
   name: IOKey.BoundingBoxBottom,
   colors: {
-    hex: '#22c55e',
-    class: 'bg-green-500',
+    hex: '#15803d',
+    class: 'bg-green-700',
   },
   structures: {
     input: IOType.BoundingBoxBottom,
@@ -88,8 +88,8 @@ export const boundingBoxBottom: IOStructure = {
 export const boundingBoxY: IOStructure = {
   name: IOKey.BoundingBoxY,
   colors: {
-    hex: '#22c55e',
-    class: 'bg-green-500',
+    hex: '#15803d',
+    class: 'bg-green-700',
   },
   structures: {
     input: IOType.BoundingBoxY,
