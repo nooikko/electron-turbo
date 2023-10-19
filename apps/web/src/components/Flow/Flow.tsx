@@ -13,7 +13,7 @@ import { ContextMenu } from '#components/ContextMenu';
 
 interface FlowProps {}
 
-export const Flow: React.FC<FlowProps> = ({}) => {
+export const Flow: React.FC<FlowProps> = () => {
   const nodeTypes = useMemo(() => NodeTypeDict, []);
   const { nodes, onNodesChange } = useContext(NodeContext);
   const { container, instance } = useContext(FlowContext);
@@ -64,7 +64,7 @@ export const Flow: React.FC<FlowProps> = ({}) => {
         <ViewportLogger />
         <ContextMenu />
       </ReactFlow>
-      <button className='absolute right-5 top-5 rounded-md bg-primary p-1 text-white shadow-md' onClick={() => getFlowStructure()}>
+      <button className='absolute right-5 top-5 rounded-md bg-primary p-2 text-white shadow-md' onClick={() => getFlowStructure()}>
         Get Structure
       </button>
     </div>
