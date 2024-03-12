@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import fs from 'fs';  // eslint-disable-line
+import { buildListeners } from './listeners';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -27,6 +28,7 @@ const createWindow = async () => {
     height,
     webPreferences: {
       nodeIntegration: true,
+      preload: path.join(__dirname, './bridge.js'),
     },
   });
 
@@ -60,7 +62,10 @@ const initialize = () => {
   if (app.isReady()) {
     createWindow();
   } else {
-    app.whenReady().then(createWindow);
+    app
+      .whenReady()
+      .then(() => buildListeners(ipcMain))
+      .then(createWindow);
   }
 };
 
